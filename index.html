@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wiki Updating</title>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background: black;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    h1 {
+        color: white;
+        font-size: 3rem;
+        text-align: center;
+        text-shadow: 
+            0 0 10px white,
+            0 0 20px white,
+            0 0 40px white;
+        z-index: 2;
+    }
+
+    canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1;
+    }
+</style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+<h1>Wiki is currently updating...</h1>
+
+<script>
+const canvas = document.getElementById("stars");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let stars = [];
+
+for (let i = 0; i < 200; i++) {
+    stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 1.5,
+        alpha: Math.random(),
+        speed: Math.random() * 0.02
+    });
+}
+
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    stars.forEach(star => {
+        star.alpha += star.speed;
+        if (star.alpha <= 0 || star.alpha >= 1) {
+            star.speed = -star.speed;
+        }
+
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(255, 255, 255, " + star.alpha + ")";
+        ctx.fill();
+    });
+
+    requestAnimationFrame(animate);
+}
+
+animate();
+
+window.addEventListener("resize", () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+});
+</script>
+
+</body>
+</html>
