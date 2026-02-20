@@ -12,6 +12,7 @@
         background: black;
         overflow: hidden;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         height: 100vh;
@@ -27,6 +28,18 @@
             0 0 20px white,
             0 0 40px white;
         z-index: 2;
+        margin-bottom: 10px;
+    }
+
+    #countdown {
+        color: white;
+        font-size: 2.5rem;
+        text-align: center;
+        text-shadow: 
+            0 0 10px #aaaaaa,
+            0 0 20px #aaaaaa;
+        z-index: 2;
+        font-variant-numeric: tabular-nums;
     }
 
     canvas {
@@ -41,6 +54,7 @@
 
 <canvas id="stars"></canvas>
 <h1>Wiki is currently under maintenance for next update...</h1>
+<div id="countdown"></div>
 
 <script>
 const canvas = document.getElementById("stars");
@@ -85,8 +99,34 @@ window.addEventListener("resize", () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 });
+
+const COUNTDOWN_TARGET = new Date('2026-02-20T17:00:00Z');
+window.COUNTDOWN_TARGET = COUNTDOWN_TARGET;
+
+const countdownElement = document.getElementById("countdown");
+
+function updateCountdown() {
+    const now = new Date().getTime();
+    const distance = COUNTDOWN_TARGET.getTime() - now;
+
+    if (distance < 0) {
+        countdownElement.innerHTML = "Update is live!";
+        return;
+    }
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    const format = (num) => num.toString().padStart(2, '0');
+
+    countdownElement.innerHTML = `${days}d ${format(hours)}h ${format(minutes)}m ${format(seconds)}s`;
+}
+
+setInterval(updateCountdown, 1000);
+updateCountdown();
 </script>
 
 </body>
-
 </html>
